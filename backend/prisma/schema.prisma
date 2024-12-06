@@ -6,6 +6,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 enum StaffType {
   doctor
   nurse
@@ -17,20 +18,20 @@ enum StaffStatus {
 }
 
 model Staff {
-  id        Int      @id @default(autoincrement())
-  name     String  
+  id        Int         @id @default(autoincrement())
+  name      String
   type      StaffType
   status    StaffStatus
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 }
 
 model Medicins {
-  id        Int      @id @default(autoincrement())
-  name     String  
-  price     Int
-  quantity  Int
-  usedNumberPerDay Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                Int      @id @default(autoincrement())
+  name              String
+  price             Decimal  @default(0.00) // Changed to Decimal
+  quantity          Int
+  usedNumberPerDay  Int
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }

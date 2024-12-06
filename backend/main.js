@@ -7,17 +7,19 @@ const app = express();
 const port = 8000;
 
 app.use(cors({
-  origin: true,
+  origin: "http://localhost:3000", // Frontend URL
   credentials: true
 }));
+
 
 app.use(morgan('dev')); 
 app.use(express.json());
 
-app.use('/medecines', medicinesRouter);
-app.use('/staff', staffRouter);
+app.use('/Medecines', medicinesRouter);
+app.use('/StaffRouter', staffRouter);
 
 app.listen(port, async() => {
   console.log(`Server running on http://localhost:${port}`);
     await seedToDatabase();
 });
+

@@ -34,7 +34,4 @@ export const seedToDatabase = async ()=> {
     });
 
     console.log("Database seeding completed!");
-    await prisma.$disconnect();  // Ensure connection is closed
-    process.exit(0); // Force exit after disconnect
-
 }
