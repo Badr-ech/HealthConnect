@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState } from "react"; 
 import Calendar from "react-calendar";
 import Card from "components/card";
 import "react-calendar/dist/Calendar.css";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
-import "assets/css/MiniCalendar.css";
+import "assets/css/FullCalendar.css";
 
-const MiniCalendar = () => {
+const FullCalendar = () => {
   const [value, onChange] = useState(new Date());
 
   return (
@@ -17,10 +17,11 @@ const MiniCalendar = () => {
           prevLabel={<MdChevronLeft className="ml-1 h-6 w-6 " />}
           nextLabel={<MdChevronRight className="ml-1 h-6 w-6 " />}
           view={"month"}
+          className="w-full h-auto" // Make the calendar take up full width and auto height
         />
       </Card>
     </div>
   );
 };
 
-export default MiniCalendar;
+export default FullCalendar;

@@ -15,13 +15,7 @@ export default function Admin(props) {
     window.addEventListener("resize", () =>
       window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
     );
-    return () => {
-      window.removeEventListener("resize", () =>
-        window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
-      );
-    };
   }, []);
-
   React.useEffect(() => {
     getActiveRoute(routes);
   }, [location.pathname]);
@@ -35,24 +29,21 @@ export default function Admin(props) {
         ) !== -1
       ) {
         setCurrentRoute(routes[i].name);
-        break;
       }
     }
     return activeRoute;
   };
-
   const getActiveNavbar = (routes) => {
     let activeNavbar = false;
     for (let i = 0; i < routes.length; i++) {
       if (
         window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
       ) {
-        return routes[i].secondary || false;
+        return routes[i].secondary;
       }
     }
     return activeNavbar;
   };
-
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
@@ -65,17 +56,15 @@ export default function Admin(props) {
     });
   };
 
-  document.documentElement.dir = "ltr"; // Ensure the document is left-to-right.
+  document.documentElement.dir = "ltr";
   return (
     <div className="flex h-full w-full">
-      {/* Sidebar */}
       <Sidebar open={open} onClose={() => setOpen(false)} />
       <div className="min-h-screen w-full bg-lightPrimary dark:!bg-navy-900">
         <main
-          className={`min-h-screen mx-[12px] flex-none transition-all md:pr-2 xl:ml-[313px]`}
+          className={`min-h-sreen mx-[12px] flex-none transition-all md:pr-2 xl:ml-[313px]`}
         >
           <div className="h-full">
-            {/* Navbar */}
             <Navbar
               onOpenSidenav={() => setOpen(true)}
               logoText={"Horizon UI Tailwind React"}
@@ -83,10 +72,10 @@ export default function Admin(props) {
               secondary={getActiveNavbar(routes)}
               {...rest}
             />
-            {/* Main Content */}
-            <div className="pt-5 mx-auto mb-auto h-full min-h-[84vh] p-2 md:pr-2">
+            <div className="pt-5s mx-auto mb-auto h-full min-h-[84vh] p-2 md:pr-2">
               <Routes>
                 {getRoutes(routes)}
+
                 <Route
                   path="/"
                   element={<Navigate to="/admin/default" replace />}
@@ -99,4 +88,3 @@ export default function Admin(props) {
     </div>
   );
 }
-

@@ -10,6 +10,7 @@ import { MdCheckCircle, MdCancel, MdOutlineError } from "react-icons/md";
 import { useMemo } from "react";
 import Progress from "components/progress";
 import { useFetch } from "hooks/api";
+
 const ComplexTable = (props) => {
   const { columnsData, tableData } = props;
 
@@ -34,6 +35,7 @@ const ComplexTable = (props) => {
     prepareRow,
     initialState,
   } = tableInstance;
+
   initialState.pageSize = 5;
 
   const { data: result } = useFetch("http://localhost:8000/staff");
@@ -41,14 +43,14 @@ const ComplexTable = (props) => {
 
   return (
     <Card extra={"w-full h-full p-4 sm:overflow-x-auto"}>
-      <div class="relative flex items-center justify-between">
-        <div class="text-xl font-bold text-navy-700 dark:text-white">
+      <div className="relative flex items-center justify-between">
+        <div className="text-xl font-bold text-navy-700 dark:text-white">
           Complex Table
         </div>
         <CardMenu />
       </div>
 
-      <div class="mt-8 h-full overflow-x-scroll xl:overflow-hidden">
+      <div className="mt-8 h-full overflow-x-scroll xl:overflow-hidden">
         <table {...getTableProps()} className="w-full">
           <thead>
             {headerGroups.map((headerGroup, index) => (
@@ -68,7 +70,7 @@ const ComplexTable = (props) => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {/* {page.map((row, index) => {
+            {page.map((row, index) => {
               prepareRow(row);
               return (
                 <tr {...row.getRowProps()} key={index}>
@@ -101,7 +103,7 @@ const ComplexTable = (props) => {
                           {cell.value}
                         </p>
                       );
-                    } else if (cell.column.Header === "AVAILABLITY") {
+                    } else if (cell.column.Header === "AVAILABILITY") {
                       data = (
                         <p className="text-sm font-bold text-navy-700 dark:text-white">
                           {cell.value}
@@ -120,7 +122,7 @@ const ComplexTable = (props) => {
                   })}
                 </tr>
               );
-            })} */}
+            })}
             {loopingResult?.map((row) => {
               return (
                 <tr key={row.id}>
@@ -128,12 +130,12 @@ const ComplexTable = (props) => {
                   <td>{row.type}</td>
                   <td>
                     {row.status === "available" ? (
-                      <div className="flex items-center  gap-2">
+                      <div className="flex items-center gap-2">
                         <MdCheckCircle className="text-green-500" />
                         <span>Available</span>
                       </div>
                     ) : (
-                      <div className="flex items-center  gap-2">
+                      <div className="flex items-center gap-2">
                         <MdCancel className="text-red-500" />
                         <span>Out of the office</span>
                       </div>
@@ -151,3 +153,4 @@ const ComplexTable = (props) => {
 };
 
 export default ComplexTable;
+

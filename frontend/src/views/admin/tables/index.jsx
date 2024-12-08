@@ -1,65 +1,30 @@
-import React, { useState, useEffect } from "react";
+import CheckTable from "./components/CheckTable";
 
-const Staff = () => {
-  const [staff, setStaff] = useState([]); // Initialize as an empty array
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+import {
+  columnsDataDevelopment,
+  columnsDataCheck,
+  columnsDataColumns,
+  columnsDataComplex,
+} from "./variables/columnsData";
+import tableDataDevelopment from "./variables/tableDataDevelopment.json";
+import tableDataCheck from "./variables/tableDataCheck.json";
+import tableDataColumns from "./variables/tableDataColumns.json";
+import tableDataComplex from "./variables/tableDataComplex.json";
+import DevelopmentTable from "./components/DevelopmentTable";
+import ColumnsTable from "./components/ColumnsTable";
+import ComplexTable from "./components/ComplexTable";
 
-  useEffect(() => {
-    // Fetch staff data from the backend
-    fetch("http://localhost:8000/StaffRouter") // Match the route in main.js
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Fetched data:", data); // Debug the response
-        // Extract the "response" property from the JSON
-        setStaff(data.response || []); // Use data.response for the staff array
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching staff:", error); // Log any errors
-        setError(error.message);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) return <p>Loading staff...</p>;
-  if (error) return <p>Error: {error}</p>;
-
+const Tables = () => {
   return (
-    <div>
-      <h1>Staff</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.isArray(staff) && staff.length > 0 ? (
-            staff.map((member) => (
-              <tr key={member.id}>
-                <td>{member.name}</td>
-                <td>{member.type}</td>
-                <td>{member.status}</td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="3">No staff members available</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+    <div className="mt-5 grid h-full w-full grid-cols-1 gap-5 md:grid-cols-1">
+      <ComplexTable
+        columnsData={columnsDataComplex}
+        tableData={tableDataComplex}
+      />
+
+      {/* <div className="h-[1000px]"></div> */}
     </div>
   );
 };
 
-export default Staff;
-
+export default Tables;

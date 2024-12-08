@@ -5,6 +5,12 @@
   - You are about to drop the `staff` table. If the table is not empty, all the data it contains will be lost.
 
 */
+-- DropEnum
+DROP TYPE "staffstatus";
+
+-- DropEnum
+DROP TYPE "stafftype";
+
 -- CreateEnum
 CREATE TYPE "StaffType" AS ENUM ('doctor', 'nurse');
 
@@ -17,11 +23,7 @@ DROP TABLE "medicins";
 -- DropTable
 DROP TABLE "staff";
 
--- DropEnum
-DROP TYPE "staffstatus";
 
--- DropEnum
-DROP TYPE "stafftype";
 
 -- CreateTable
 CREATE TABLE "Staff" (
