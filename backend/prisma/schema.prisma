@@ -18,20 +18,33 @@ enum StaffStatus {
 }
 
 model Staff {
-  id        Int         @id @default(autoincrement())
-  name      String
-  type      StaffType
-  status    StaffStatus
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id           Int           @id @default(autoincrement())
+  name         String
+  type         StaffType
+  status       StaffStatus
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  appointments Appointment[] // Relationship with Appointments
 }
 
 model Medicins {
-  id                Int      @id @default(autoincrement())
-  name              String
-  price             Decimal  @default(0.00) // Changed to Decimal
-  quantity          Int
-  usedNumberPerDay  Int
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id               Int      @id @default(autoincrement())
+  name             String
+  price            Decimal  @default(0.00)
+  quantity         Int
+  usedNumberPerDay Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Appointment {
+  id             Int      @id @default(autoincrement())
+  patientName    String
+  patientContact String
+  date           DateTime
+  time           String
+  reason         String
+  createdAt      DateTime @default(now())
+  Staff          Staff?   @relation(fields: [staffId], references: [id])
+  staffId        Int?
 }

@@ -1,26 +1,54 @@
+import React, { useMemo } from "react";
 import CardMenu from "components/card/CardMenu";
 import Card from "components/card";
-import {
-  useGlobalFilter,
-  usePagination,
-  useSortBy,
-  useTable,
-} from "react-table";
-import { MdCheckCircle, MdCancel, MdOutlineError } from "react-icons/md";
-import { useMemo } from "react";
-import Progress from "components/progress";
+import { useGlobalFilter, usePagination, useSortBy, useTable } from "react-table";
+import { MdCheckCircle, MdCancel } from "react-icons/md";
 import { useFetch } from "hooks/api";
 
-const ComplexTable = (props) => {
-  const { columnsData, tableData } = props;
+const ComplexTable = () => {
+  // Fetch data from the backend API
+  const { data: result, error } = useFetch("http://localhost:8000/StaffRouter");
 
-  const columns = useMemo(() => columnsData, [columnsData]);
-  const data = useMemo(() => tableData, [tableData]);
+  // Safely extract the fetched data or default to an empty array
+  const loopingResult = useMemo(() => result?.response || [], [result]);
 
+  // Define columns for the table
+  const columns = useMemo(() => [
+    {
+      Header: "NAME",
+      accessor: "name",
+    },
+    {
+      Header: "STATUS",
+      accessor: "status",
+      Cell: ({ value }) => (
+        <div className="flex items-center gap-2">
+          {value === "available" ? (
+            <MdCheckCircle className="text-green-500" />
+          ) : (
+            <MdCancel className="text-red-500" />
+          )}
+          <span className="text-sm font-bold text-navy-700 dark:text-white">
+            {value === "available" ? "Available" : "Out of the office"}
+          </span>
+        </div>
+      ),
+    },
+    {
+      Header: "TYPE",
+      accessor: "type",
+    },
+    {
+      Header: "AVAILABILITY",
+      accessor: "availability",
+    },
+  ], []);
+
+  // Initialize the React Table instance
   const tableInstance = useTable(
     {
       columns,
-      data,
+      data: loopingResult, // Use the fetched data
     },
     useGlobalFilter,
     useSortBy,
@@ -31,15 +59,13 @@ const ComplexTable = (props) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    page,
+    rows,
     prepareRow,
-    initialState,
   } = tableInstance;
 
-  initialState.pageSize = 5;
-
-  const { data: result } = useFetch("http://localhost:8000/staff");
-  const loopingResult = result?.response;
+  // Handle loading and error states
+  if (!result && !error) return <div>Loading...</div>;
+  if (error) return <div>Error fetching data: {error.message}</div>;
 
   return (
     <Card extra={"w-full h-full p-4 sm:overflow-x-auto"}>
@@ -70,78 +96,19 @@ const ComplexTable = (props) => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map((row, index) => {
+            {rows.map((row) => {
               prepareRow(row);
               return (
-                <tr {...row.getRowProps()} key={index}>
-                  {row.cells.map((cell, index) => {
-                    let data = "";
-                    if (cell.column.Header === "NAME") {
-                      data = (
-                        <p className="text-sm font-bold text-navy-700 dark:text-white">
-                          {cell.value}
-                        </p>
-                      );
-                    } else if (cell.column.Header === "STATUS") {
-                      data = (
-                        <div className="flex items-center gap-2">
-                          <div className={`rounded-full text-xl`}>
-                            {cell.value === "Available" ? (
-                              <MdCheckCircle className="text-green-500" />
-                            ) : cell.value === "Out of office" ? (
-                              <MdCancel className="text-red-500" />
-                            ) : null}
-                          </div>
-                          <p className="text-sm font-bold text-navy-700 dark:text-white">
-                            {cell.value}
-                          </p>
-                        </div>
-                      );
-                    } else if (cell.column.Header === "TYPE") {
-                      data = (
-                        <p className="text-sm font-bold text-navy-700 dark:text-white">
-                          {cell.value}
-                        </p>
-                      );
-                    } else if (cell.column.Header === "AVAILABILITY") {
-                      data = (
-                        <p className="text-sm font-bold text-navy-700 dark:text-white">
-                          {cell.value}
-                        </p>
-                      );
-                    }
-                    return (
-                      <td
-                        className="pt-[14px] pb-[18px] sm:text-[14px]"
-                        {...cell.getCellProps()}
-                        key={index}
-                      >
-                        {data}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-            {loopingResult?.map((row) => {
-              return (
-                <tr key={row.id}>
-                  <td>{row.name}</td>
-                  <td>{row.type}</td>
-                  <td>
-                    {row.status === "available" ? (
-                      <div className="flex items-center gap-2">
-                        <MdCheckCircle className="text-green-500" />
-                        <span>Available</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <MdCancel className="text-red-500" />
-                        <span>Out of the office</span>
-                      </div>
-                    )}
-                  </td>
-                  <td>8:00AM - 6:00PM</td>
+                <tr {...row.getRowProps()} key={row.id}>
+                  {row.cells.map((cell) => (
+                    <td
+                      {...cell.getCellProps()}
+                      className="pt-[14px] pb-[18px] sm:text-[14px]"
+                      key={cell.column.id}
+                    >
+                      {cell.render("Cell")}
+                    </td>
+                  ))}
                 </tr>
               );
             })}

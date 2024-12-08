@@ -49,3 +49,13 @@ CREATE TABLE "Medicins" (
 
     CONSTRAINT "Medicins_pkey" PRIMARY KEY ("id")
 );
+CREATE TABLE appointments (
+    id SERIAL PRIMARY KEY,              -- Unique ID for each appointment
+    staff_id INT REFERENCES staff(id),  -- Link to a staff member (optional)
+    patient_name VARCHAR(100),          -- Name of the patient
+    patient_contact VARCHAR(15),        -- Contact details of the patient
+    date DATE NOT NULL,                 -- Appointment date
+    time VARCHAR(10) NOT NULL,          -- Appointment time
+    reason TEXT NOT NULL,               -- Reason for the appointment
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Time of booking
+);
