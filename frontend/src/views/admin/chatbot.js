@@ -6,7 +6,8 @@ const Chatbot = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false); // Typing indicator
 
-  const API_KEY = "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";
+  const API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
+
 
   const handleOpenChat = () => setIsOpen(true);
   const handleCloseChat = () => setIsOpen(false);
