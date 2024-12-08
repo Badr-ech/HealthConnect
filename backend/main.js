@@ -4,8 +4,6 @@ import morgan from "morgan";
 
 import { medicinesRouter, staffRouter, appointmentsRouter } from "./Routers/index.js"; // Import the new router
 import { seedToDatabase } from "./DB/seeder.js";
-import dotenv from "dotenv";
-dotenv.config();
 
 const app = express();
 const port = 8000;
